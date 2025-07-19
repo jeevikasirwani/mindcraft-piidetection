@@ -124,7 +124,7 @@ function App() {
                 Advanced PII Detection Features
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                Our AI-powered platform uses cutting-edge computer vision technology 
+                Our AI-powered platform uses computer vision technology 
                 to detect and protect sensitive information in images.
               </p>
             </div>
@@ -139,7 +139,7 @@ function App() {
                 </h3>
                 <p className="text-gray-600 text-sm">
                   Advanced computer vision algorithms detect PII with high accuracy 
-                  using Google Vision and Azure Cognitive Services.
+                  using Google Vision.
                 </p>
               </div>
 
@@ -168,23 +168,6 @@ function App() {
                   emails, ID numbers, and credit cards.
                 </p>
               </div>
-            </div>
-          </div>
-
-          {/* About Section */}
-          <div id="about" className="mt-16">
-            <div className="card">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">About MindCraft</h2>
-              <p className="text-gray-600 mb-4">
-                MindCraft is an advanced AI-powered platform that specializes in detecting 
-                and protecting Personally Identifiable Information (PII) in images. Our 
-                system uses state-of-the-art computer vision technology to identify sensitive 
-                data and automatically mask it for secure processing.
-              </p>
-              <p className="text-gray-600">
-                Built with FastAPI backend and React frontend, MindCraft provides a 
-                seamless user experience for secure image processing and PII detection.
-              </p>
             </div>
           </div>
         </div>

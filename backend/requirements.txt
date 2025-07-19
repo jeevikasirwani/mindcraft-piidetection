@@ -6,6 +6,9 @@ pytesseract==0.3.10
 numpy==1.24.3
 Pillow==10.0.1
 
+# EasyOCR for better text extraction
+easyocr==1.7.0
+
 # Computer Vision APIs for PII detection
 google-cloud-vision==3.4.4
 azure-cognitiveservices-vision-computervision==0.9.0

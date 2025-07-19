@@ -4,15 +4,13 @@ from datetime import datetime
 
 
 class PIIEntity(BaseModel):
-    """Represents a detected PII entity"""
     text: str
     entity_type: str
     confidence: float
-    bbox: List[int]  # [x, y, width, height]
+    bbox: List[int]
 
 
 class OCRResult(BaseModel):
-    """OCR extraction result"""
     success: bool
     text_blocks: List[dict] = []
     full_text: str = ""
@@ -22,7 +20,6 @@ class OCRResult(BaseModel):
 
 
 class ProcessImageResponse(BaseModel):
-    """Response model for image processing"""
     success: bool
     message: str
     file_path: Optional[str] = None
@@ -36,7 +33,6 @@ class ProcessImageResponse(BaseModel):
 
 
 class PreviewResponse(BaseModel):
-    """Response model for preview detection"""
     success: bool
     preview_image_path: Optional[str] = None
     detected_entities: List[dict] = []
@@ -45,15 +41,13 @@ class PreviewResponse(BaseModel):
 
 
 class HealthResponse(BaseModel):
-    """Health check response"""
     status: str
     timestamp: float
-    version: str = "3.0.0"
+    version: str = "1.0.0"
     services: dict = {}
 
 
 class StatisticsResponse(BaseModel):
-    """Statistics response"""
     total_files: int
     file_types: dict
     processing_files: dict

@@ -32,7 +32,7 @@ const Footer = () => {
           
           <div className="flex space-x-4 mt-4 md:mt-0">
             <a 
-              href="https://github.com" 
+              href="https://github.com/jeevikasirwani/mindcraftassignment" 
               className="text-gray-300 hover:text-white transition-colors"
               target="_blank"
               rel="noopener noreferrer"

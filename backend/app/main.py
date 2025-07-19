@@ -4,14 +4,10 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 import os
 import time
-import logging
 from .models import ProcessImageResponse
 from .services.ocr_service import OCRService
 from .services.vision_detector import VisionDetector
 from .services.image_processor import ImageProcessor
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 app = FastAPI(title="PII Detection API", version="1.0.0")
 
@@ -29,14 +25,13 @@ app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 ocr_service = None
 vision_detector = None
 image_processor = None
-
+# service initialization
 try:
     ocr_service = OCRService()
     vision_detector = VisionDetector()
     image_processor = ImageProcessor()
-    logger.info("All services initialized successfully")
 except Exception as e:
-    logger.error(f"Service initialization failed: {e}")
+    print(f"Service initialization failed: {e}")
 
 def normalize_path_for_web(path):
     if path is None:
@@ -75,28 +70,17 @@ async def process_image(file: UploadFile = File(...)):
             content = await file.read()
             buffer.write(content)
         
-        logger.info(f"File saved to: {file_path}")
-        
-        logger.info("Starting OCR text extraction...")
         ocr_result = ocr_service.extract_text_from_image(file_path)
-        logger.info(f"OCR completed. Method: {ocr_result.get('method', 'unknown')}, Blocks: {ocr_result.get('total_blocks', 0)}")
-        
-        logger.info("Starting PII detection...")
         detected_entities = vision_detector.detect_pii_from_image(file_path, ocr_result)
-        logger.info(f"PII detection completed. Found {len(detected_entities)} entities")
         
         masked_image_path = None
         preview_image_path = None
         if detected_entities:
             try:
                 masked_image_path = image_processor.mask_pii_areas(file_path, detected_entities)
-                logger.info(f"Image masking completed: {masked_image_path}")
-                
-                # Create preview with bounding boxes
                 preview_image_path = image_processor.create_preview(file_path, detected_entities)
-                logger.info(f"Preview created: {preview_image_path}")
             except Exception as e:
-                logger.error(f"Image processing failed: {e}")
+                print(f"Image processing failed: {e}")
         
         processing_time = time.time() - start_time
         
@@ -134,7 +118,6 @@ async def process_image(file: UploadFile = File(...)):
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Processing error: {e}")
         raise HTTPException(status_code=500, detail=f"Processing failed: {str(e)}")
 
 @app.get("/files/{filename}")

@@ -271,3 +271,5 @@ celerybeat.pid
 
 # Cython
 cython_debug/ 
+.uploads
+.outputsamples

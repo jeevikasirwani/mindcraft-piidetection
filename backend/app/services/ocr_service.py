@@ -4,7 +4,6 @@ from typing import Dict, List
 import logging
 import os
 
-# Fix PIL ANTIALIAS issue for EasyOCR
 try:
     from PIL import Image
     if not hasattr(Image, 'ANTIALIAS'):
@@ -20,8 +19,8 @@ class OCRService:
         
         try:
             import easyocr
-            self.easyocr_reader = easyocr.Reader(['en'])
-            logger.info("EasyOCR initialized")
+            self.easyocr_reader = easyocr.Reader(['en', 'hi'])
+            logger.info("EasyOCR initialized with English and Hindi support")
         except Exception as e:
             logger.warning(f"EasyOCR not available: {e}")
             self.easyocr_reader = None

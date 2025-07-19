@@ -51,10 +51,8 @@ class ImageProcessor:
                 x, y, w, h = entity.bbox
                 
                 if 0 <= x < width and 0 <= y < height and w > 0 and h > 0:
-                    # Draw red rectangle around detected PII
                     cv2.rectangle(image, (x, y), (x+w, y+h), (0, 0, 255), 2)
                     
-                    # Add label above the box
                     label = self._get_entity_label(entity.entity_type)
                     cv2.putText(image, label, (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
                     

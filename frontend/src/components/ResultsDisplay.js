@@ -4,7 +4,6 @@ import { api } from '../api/client';
 
 const ResultsDisplay = ({ results }) => {
   const [activeTab, setActiveTab] = useState('preview');
-  const [selectedEntity, setSelectedEntity] = useState(null);
 
   if (!results) return null;
 
@@ -30,19 +29,7 @@ const ResultsDisplay = ({ results }) => {
     return colors[entityType] || 'bg-gray-100 text-gray-800';
   };
 
-  const getEntityIcon = (entityType) => {
-    switch (entityType) {
-      case 'PERSON':
-        return <Shield className="w-4 h-4" />;
-      case 'EMAIL':
-      case 'PHONE_NUMBER':
-      case 'ID_NUMBER':
-      case 'CREDIT_CARD':
-        return <AlertTriangle className="w-4 h-4" />;
-      default:
-        return <CheckCircle className="w-4 h-4" />;
-    }
-  };
+  
 
   const handleDownload = (imagePath) => {
     if (!imagePath) return;
@@ -145,9 +132,6 @@ const ResultsDisplay = ({ results }) => {
           
           {activeTab === 'masked' && masked_image_path && (
             <div className="text-center">
-              {console.log('Masked image path:', masked_image_path)}
-              {console.log('Extracted filename:', masked_image_path.replace(/^uploads[\\/]/, ''))}
-              {console.log('Final URL:', api.getMaskedImageUrl(masked_image_path.replace(/^uploads[\\/]/, '')))}
               <img
                 src={api.getMaskedImageUrl(masked_image_path.replace(/^uploads[\\/]/, ''))}
                 alt="Masked image"
@@ -176,10 +160,7 @@ const ResultsDisplay = ({ results }) => {
             {detected_entities.map((entity, index) => (
               <div
                 key={index}
-                className={`p-4 rounded-lg border cursor-pointer transition-all hover:shadow-md ${
-                  selectedEntity === index ? 'ring-2 ring-primary-500' : ''
-                }`}
-                onClick={() => setSelectedEntity(selectedEntity === index ? null : index)}
+                                className="p-4 rounded-lg border transition-all hover:shadow-md"               
               >
                 <div className="flex items-start justify-between mb-2">
                   <div className={`px-2 py-1 rounded-full text-xs font-medium ${getEntityTypeColor(entity.entity_type)}`}>
@@ -194,35 +175,13 @@ const ResultsDisplay = ({ results }) => {
                   {entity.text}
                 </div>
                 
-                {selectedEntity === index && (
-                  <div className="mt-2 p-2 bg-gray-50 rounded text-xs text-gray-600">
-                    <div>Bounding Box: [{entity.bbox.join(', ')}]</div>
-                    <div>Confidence: {(entity.confidence * 100).toFixed(1)}%</div>
-                  </div>
-                )}
+
               </div>
             ))}
           </div>
         </div>
       )}
 
-      {/* PII Types Summary */}
-      {statistics?.pii_types_detected && (
-        <div className="card">
-          <h3 className="text-lg font-bold text-gray-900 mb-4">PII Types Detected</h3>
-          <div className="flex flex-wrap gap-2">
-            {statistics.pii_types_detected.map((type, index) => (
-              <span
-                key={index}
-                className={`px-3 py-1 rounded-full text-sm font-medium ${getEntityTypeColor(type)}`}
-              >
-                {getEntityIcon(type)}
-                <span className="ml-1">{type}</span>
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 };

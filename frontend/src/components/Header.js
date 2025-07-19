@@ -18,13 +18,7 @@ const Header = () => {
             </div>
           </div>
           
-          <div className="flex items-center space-x-4">
-            <div className="hidden md:flex items-center space-x-4 text-sm">
-              <a href="#features" className="text-gray-600 hover:text-gray-900 transition-colors">
-                Features
-              </a>
-            </div>
-          </div>
+          
         </div>
       </div>
     </header>

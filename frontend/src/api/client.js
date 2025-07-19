@@ -12,26 +12,14 @@ const apiClient = axios.create({
 
 // Request interceptor
 apiClient.interceptors.request.use(
-  (config) => {
-    console.log('Making request to:', config.url);
-    return config;
-  },
-  (error) => {
-    console.error('Request error:', error);
-    return Promise.reject(error);
-  }
+  (config) => config,
+  (error) => Promise.reject(error)
 );
 
 // Response interceptor
 apiClient.interceptors.response.use(
-  (response) => {
-    console.log('Response received:', response.status);
-    return response;
-  },
-  (error) => {
-    console.error('Response error:', error.response?.data || error.message);
-    return Promise.reject(error);
-  }
+  (response) => response,
+  (error) => Promise.reject(error)
 );
 
 export const api = {
@@ -57,12 +45,7 @@ export const api = {
   getUploadsUrl: (filename) => `${API_BASE_URL}/files/${filename}`,
   
   // Get masked image URL
-  getMaskedImageUrl: (filename) => {
-    const url = `${API_BASE_URL}/files/${filename}`;
-    console.log('getMaskedImageUrl called with filename:', filename);
-    console.log('Generated URL:', url);
-    return url;
-  },
+  getMaskedImageUrl: (filename) => `${API_BASE_URL}/files/${filename}`,
 };
 
 export default apiClient; 

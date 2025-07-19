@@ -32,19 +32,14 @@ const Footer = () => {
           
           <div className="flex space-x-4 mt-4 md:mt-0">
             <a 
-              href="https://github.com/jeevikasirwani/mindcraftassignment" 
+              href="https://github.com/jeevikasirwani/mindcraft-piidetection" 
               className="text-gray-300 hover:text-white transition-colors"
               target="_blank"
               rel="noopener noreferrer"
             >
               <Github className="w-5 h-5" />
             </a>
-            <a 
-              href="mailto:support@piidetection.ai" 
-              className="text-gray-300 hover:text-white transition-colors"
-            >
-              <Mail className="w-5 h-5" />
-            </a>
+            
           </div>
         </div>
       </div>

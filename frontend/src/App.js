@@ -117,59 +117,7 @@ function App() {
             )}
           </div>
 
-          {/* Features Section */}
-          <div id="features" className="mt-16">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                Advanced PII Detection Features
-              </h2>
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                Our AI-powered platform uses computer vision technology 
-                to detect and protect sensitive information in images.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              <div className="card text-center">
-                <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                  <Server className="w-6 h-6 text-primary-600" />
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  Computer Vision
-                </h3>
-                <p className="text-gray-600 text-sm">
-                  Advanced computer vision algorithms detect PII with high accuracy 
-                  using Google Vision.
-                </p>
-              </div>
-
-              <div className="card text-center">
-                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                  <CheckCircle className="w-6 h-6 text-green-600" />
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  Real-time Processing
-                </h3>
-                <p className="text-gray-600 text-sm">
-                  Process images instantly with real-time PII detection and 
-                  immediate masking capabilities.
-                </p>
-              </div>
-
-              <div className="card text-center">
-                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                  <AlertCircle className="w-6 h-6 text-purple-600" />
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  Multiple PII Types
-                </h3>
-                <p className="text-gray-600 text-sm">
-                  Detect various PII types including names, addresses, phone numbers, 
-                  emails, ID numbers, and credit cards.
-                </p>
-              </div>
-            </div>
-          </div>
+          
         </div>
       </main>
 

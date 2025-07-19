@@ -108,28 +108,57 @@ class AdvancedPIIDetector:
     def _detect_custom_patterns(self, text: str, block: Dict) -> List[PIIEntity]:
         entities = []
         
+        # Skip organization/government names and document titles
+        org_keywords = [
+            'government', 'of india', 'uidai', 'unique identification authority', 
+            'ministry', 'department', 'भारत सरकार', 'भारत', 'सरकार',
+            'government of india', 'government of', 'of india',
+            'permanent account number card', 'स्थायी लेखा संख्या कार्ड',
+            'income tax department', 'आयकर विभाग', 'income tax',
+            'card', 'कार्ड', 'document', 'documentation', 'form',
+            'permanent account number', 'स्थायी लेखा संख्या',
+            'unique identification', 'unique id', 'identification',
+            'authority', 'authority of india', 'भारत सरकार का',
+            'स्थायी लेखा संख्या कार्ड', 'स्थायी लेखा', 'लेखा संख्या',
+            'भारतीय विशिष्ट पहचान प्राधिकरण', 'unique identification authority of india',
+            'bhartiya vishisht pehchan pradhikaran', 'vishisht pehchan pradhikaran'
+        ]
+        text_lower = text.lower()
+        text_stripped = text.strip()
+        
+        if any(keyword in text_lower for keyword in org_keywords):
+            return entities
+        
+        # Check for specific Hindi text that's still being detected
+        hindi_exclusions = [
+            'स्थायी लेखा संख्या कार्ड',
+            'स्थायी लेखा संख्या',
+            'लेखा संख्या कार्ड',
+            'स्थायी लेखा',
+            'लेखा संख्या'
+        ]
+        
+        for exclusion in hindi_exclusions:
+            if exclusion in text_stripped or exclusion in text:
+                return entities
+        
         patterns = {
             'aadhaar_number': [
                 r'\b\d{4}\s?\d{4}\s?\d{4}\b',
-                r'\b\d{4}-\d{4}-\d{4}\b',
                 r'\b\d{12}\b',
+                r'\b\d{4}\b',  # For small segments
             ],
             'pan_number': [
                 r'\b[A-Z]{5}[0-9]{4}[A-Z]{1}\b',
-                r'\b[A-Z]{3}[A-Z0-9]{1}[0-9]{4}[A-Z]{1}\b',
             ],
             'phone_number': [
                 r'\b[6-9]\d{9}\b',
-                r'\b\d{3}-\d{3}-\d{4}\b',
-                r'\b\d{5}-\d{5}\b',
             ],
             'email': [
                 r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b',
             ],
             'date_time': [
                 r'\b\d{1,2}[/-]\d{1,2}[/-]\d{2,4}\b',
-                r'\b\d{1,2}\s+(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{4}\b',
-                r'\b(?:DOB|Date of Birth|जन्म तिथि)\s*[:.]?\s*\d{1,2}[/-]\d{1,2}[/-]\d{2,4}\b',
             ],
             'person': [
                 r'\b[A-Z][a-z]+\s+[A-Z][a-z]+\b',
@@ -137,9 +166,17 @@ class AdvancedPIIDetector:
             ],
             'address': [
                 r'\b(?:address|पता|village|गाँव|city|शहर|street|road|lane|colony|sector|block|flat|apartment|house|building)\b',
-                r'\b\d+\s+(?:street|road|lane|colony|sector|block|flat|apartment|house|building)\b',
                 r'\b(?:near|opposite|behind|in front of|next to)\s+[A-Za-z\s]+\b',
                 r'\b(?:area|locality|postal|pin|district|state|country)\b',
+                r'\b(?:d/o|s/o|w/o|h/o|daughter of|son of|wife of|husband of)\b',
+                r'\b(?:flat no|flat number|apartment no|apartment number|house no|house number)\b',
+                r'\b(?:wing|floor|building|complex|society|colony|area|locality)\b',
+                r'\b(?:pune|mumbai|delhi|bangalore|chennai|kolkata|hyderabad)\b',
+                r'\b(?:maharashtra|karnataka|tamil nadu|west bengal|telangana|andhra pradesh)\b',
+                r'\b(?:punjab|haryana|gujarat|rajasthan|uttar pradesh|bihar|jharkhand)\b',
+                r'\b(?:odisha|chhattisgarh|madhya pradesh|himachal pradesh|uttarakhand)\b',
+                r'\b(?:sikkim|arunachal pradesh|assam|manipur|meghalaya|mizoram)\b',
+                r'\b(?:nagaland|tripura|goa|kerala)\b',
             ]
         }
         
@@ -147,15 +184,25 @@ class AdvancedPIIDetector:
             for pattern in pattern_list:
                 matches = re.finditer(pattern, text, re.IGNORECASE)
                 for match in matches:
-                    entity = PIIEntity(
-                        text=match.group(),
-                        entity_type=entity_type,
-                        confidence=0.95,
-                        bbox=[block['x'], block['y'], block['width'], block['height']]
-                    )
-                    entities.append(entity)
-                    
-                    logger.debug(f"Custom pattern detected {entity_type}: '{entity.text}'")
+                    # Special handling for small Aadhaar segments
+                    if entity_type == 'aadhaar_number' and len(match.group().strip()) == 4 and match.group().isdigit():
+                        # Only detect if it's a standalone 4-digit number
+                        if len(text.strip()) == 4:
+                            entity = PIIEntity(
+                                text=match.group(),
+                                entity_type=entity_type,
+                                confidence=0.8,
+                                bbox=[block['x'], block['y'], block['width'], block['height']]
+                            )
+                            entities.append(entity)
+                    else:
+                        entity = PIIEntity(
+                            text=match.group(),
+                            entity_type=entity_type,
+                            confidence=0.95,
+                            bbox=[block['x'], block['y'], block['width'], block['height']]
+                        )
+                        entities.append(entity)
         
         return entities
     

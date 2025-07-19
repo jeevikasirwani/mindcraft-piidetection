@@ -139,6 +139,7 @@ cython_debug/
 
 # Project specific
 uploads/
+uploads/*
 *.jpg
 *.jpeg
 *.png
@@ -271,5 +272,7 @@ celerybeat.pid
 
 # Cython
 cython_debug/ 
-.uploads
-.outputsamples
+
+# Remove incorrect patterns
+# .uploads  # This was wrong - should be uploads/
+# .outputsamples
